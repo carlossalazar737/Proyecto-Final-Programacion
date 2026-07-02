@@ -1,5 +1,17 @@
 #include <stdio.h>
+#include <string.h>
+typedef struct {
+    char codigo_cita[16];
+    char nombre_paciente[50];
+    char especialidad[30];
+    char fecha[11];
+    char hora[6];
+    char medico[50];
+} Cita;
+Cita citas[100];
+int totalCitas = 0;
 void MostrarMenu();
+void RegistrarCita();
     int main(){
         int opcion;
         do{
@@ -7,7 +19,7 @@ void MostrarMenu();
             scanf("%d", &opcion);
             switch (opcion){
                 case 1:
-                printf("\nRegistrar cita\n");
+                RegistrarCita();
                 break;
                 case 2:
                 printf("\nListar cita\n");
@@ -48,11 +60,19 @@ void MostrarMenu(){
             printf("7. Salir\n");
             printf("Seleccione una opción: ");
 }
-typedef struct {
-    char codigo_cita[16];
-    char nombre_paciente[50];
-    char especialidad[30];
-    char fecha[11];
-    char hora[6];
-    char medico[50];
-} Cita;
+void RegistrarCita(){
+    sprintf(citas[totalCitas].codigo_cita, "CITA%03d", totalCitas + 1);
+    printf("Codigo de cita generado: %s\n", citas[totalCitas].codigo_cita);
+    printf("Nombre del paciente: ");
+    scanf(" %[^\n]",citas[totalCitas].nombre_paciente);
+    printf("Especialidad: ");
+    scanf(" %[^\n]",citas[totalCitas].especialidad);
+    printf("Fecha (dd/mm/aaaa): ");
+    scanf("%s", citas[totalCitas].fecha);
+    printf("Hora (hh:mm): ");
+    scanf("%s", citas[totalCitas].hora);
+    printf("Medico: ");
+    scanf(" %[^\n]", citas[totalCitas].medico);
+    totalCitas++;
+    printf("Cita registrada exitosamente.\n");
+}
