@@ -12,6 +12,7 @@ Cita citas[100];
 int totalCitas = 0;
 void MostrarMenu();
 void RegistrarCita();
+void ListarCitas();
     int main(){
         int opcion;
         do{
@@ -22,7 +23,7 @@ void RegistrarCita();
                 RegistrarCita();
                 break;
                 case 2:
-                printf("\nListar cita\n");
+                ListarCitas();
                 break;
                 case 3:
                 printf("\nBuscar cita\n");
@@ -61,6 +62,7 @@ void MostrarMenu(){
             printf("Seleccione una opción: ");
 }
 void RegistrarCita(){
+    printf("\n=====Registro de cita=====\n");
     sprintf(citas[totalCitas].codigo_cita, "CITA%03d", totalCitas + 1);
     printf("Codigo de cita generado: %s\n", citas[totalCitas].codigo_cita);
     printf("Nombre del paciente: ");
@@ -75,4 +77,20 @@ void RegistrarCita(){
     scanf(" %[^\n]", citas[totalCitas].medico);
     totalCitas++;
     printf("Cita registrada exitosamente.\n");
+}
+void ListarCitas(){
+    printf("\n=====Listado de citas=====\n");
+    if (totalCitas == 0) {
+        printf("No hay citas registradas.\n");
+        return;
+    }
+    for (int i=0; i<totalCitas; i++){
+        printf("%s,%s, %s, %s, %s, %s\n", 
+            citas[i].codigo_cita, 
+            citas[i].nombre_paciente, 
+            citas[i].especialidad, 
+            citas[i].fecha, 
+            citas[i].hora, 
+            citas[i].medico);
+    }
 }
