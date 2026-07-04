@@ -13,7 +13,11 @@ int totalCitas = 0;
 void MostrarMenu();
 void RegistrarCita();
 void ListarCitas();
-    int main(){
+void BuscarCita();
+void MostrarminiMenu();
+void BuscarCodigo();
+void BuscarNombre();
+int main(){
         int opcion;
         do{
             MostrarMenu();
@@ -26,7 +30,7 @@ void ListarCitas();
                 ListarCitas();
                 break;
                 case 3:
-                printf("\nBuscar cita\n");
+                BuscarCita();
                 break;
                 case 4:
                 printf("\nActualizar cita\n");
@@ -93,4 +97,62 @@ void ListarCitas(){
             citas[i].hora, 
             citas[i].medico);
     }
+}
+void BuscarCita(){
+    int opcion;
+    printf("\n=====Buscar cita=====\n");
+    printf("Seleccione el criterio de búsqueda:\n");
+    printf("1. Buscar por código\n");
+    printf("2. Buscar por nombre del paciente\n");
+    printf("3. Regresar al Menú Principal\n");
+    printf("Ingrese su opción: ");
+    scanf("%d", &opcion);
+    switch (opcion) {
+        case 1:
+        BuscarCodigo();
+        break;
+        case 2:
+        BuscarNombre();
+        break;
+        case 3:
+        printf("Regresar al Menú Principal\n");
+        break;
+    }
+}
+void BuscarCodigo(){
+    char codigo[16];
+    printf("Ingrese el codigo de la cita: ");
+    scanf("%s", codigo);
+    for (int i=0; i<totalCitas; i++){
+        if (strcmp(citas[i].codigo_cita, codigo) == 0){
+            printf("=====Cita encontrada=====\n");
+            printf("Codigo: %s\n", citas[i].codigo_cita);
+            printf("Nombre del paciente: %s\n", citas[i].nombre_paciente);
+            printf("Especialidad: %s\n", citas[i].especialidad);
+            printf("Fecha: %s\n", citas[i].fecha);
+            printf("Hora: %s\n", citas[i].hora);
+            printf("Medico: %s\n", citas[i].medico);
+            return;
+        }
+    }
+    
+    printf("Cita no encontrada.\n");
+}
+void BuscarNombre(){
+    char nombre[50];
+    printf("ingrese el nombre del paciente: ");
+    scanf(" %[^\n]", nombre);
+    for (int i=0; i<totalCitas; i++){
+        if (strcmp(citas[i].nombre_paciente, nombre) == 0){
+            printf("=====Cita encontrada=====\n");
+            printf("Codigo: %s\n", citas[i].codigo_cita);
+            printf("Nombre del paciente: %s\n", citas[i].nombre_paciente);
+            printf("Especialidad: %s\n", citas[i].especialidad);
+            printf("Fecha: %s\n", citas[i].fecha);
+            printf("Hora: %s\n", citas[i].hora);
+            printf("Medico: %s\n", citas[i].medico);
+            return;
+        }
+    }
+    printf("Cita no encontrada.\n");
 }
