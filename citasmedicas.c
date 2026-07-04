@@ -14,9 +14,9 @@ void MostrarMenu();
 void RegistrarCita();
 void ListarCitas();
 void BuscarCita();
-void MostrarminiMenu();
 void BuscarCodigo();
 void BuscarNombre();
+void ActualizarCita();
 int main(){
         int opcion;
         do{
@@ -33,7 +33,7 @@ int main(){
                 BuscarCita();
                 break;
                 case 4:
-                printf("\nActualizar cita\n");
+                ActualizarCita();
                 break;
                 case 5:
                 printf("\n Eliminar cita\n");
@@ -101,7 +101,7 @@ void ListarCitas(){
 void BuscarCita(){
     int opcion;
     printf("\n=====Buscar cita=====\n");
-    printf("Seleccione el criterio de búsqueda:\n");
+    printf("Seleccione la manera de búsqueda:\n");
     printf("1. Buscar por código\n");
     printf("2. Buscar por nombre del paciente\n");
     printf("3. Regresar al Menú Principal\n");
@@ -155,4 +155,63 @@ void BuscarNombre(){
         }
     }
     printf("Cita no encontrada.\n");
+}
+void ActualizarCita(){
+    char codigo[16];
+    int opcion;
+    printf("Ingrese el codigo de la cita a actualizar: ");
+    scanf("%s", codigo);
+    for (int i=0; i<totalCitas; i++){
+        Cita *cita = &citas[i];
+        if (strcmp(citas[i].codigo_cita, codigo) == 0){
+            printf("=====Cita Actualizable=====\n");
+            printf("Codigo: %s\n", cita->codigo_cita);
+            printf("Nombre del paciente: %s\n", cita->nombre_paciente);
+            printf("Especialidad: %s\n", cita->especialidad);
+            printf("Fecha: %s\n", cita->fecha);
+            printf("Hora: %s\n", cita->hora);
+            printf("Medico: %s\n", cita->medico);
+            do {
+                printf("Seleccione el campo a actualizar:\n");
+                printf("1. Nombre del paciente\n");
+                printf("2. Especialidad\n");
+                printf("3. Fecha\n");
+                printf("4. Hora\n");
+                printf("5. Medico\n");
+                printf("6. Regresar al Menú Principal\n");
+                printf("Ingrese su opción: ");
+                scanf("%d", &opcion);
+                switch (opcion) {
+                    case 1:
+                    printf("Ingrese el nuevo nombre del paciente: ");
+                    scanf(" %[^\n]", cita->nombre_paciente);
+                    break;
+                    case 2:
+                    printf("Ingrese la nueva especialidad: ");
+                    scanf(" %[^\n]", cita->especialidad);
+                    break;
+                    case 3:
+                    printf("Ingrese la nueva fecha (dd/mm/aaaa): ");
+                    scanf("%s", cita->fecha);
+                    break;
+                    case 4:
+                    printf("Ingrese la nueva hora (hh:mm): ");
+                    scanf("%s", cita->hora);
+                    break;
+                    case 5:
+                    printf("Ingrese el nuevo medico: ");
+                    scanf(" %[^\n]", cita->medico);
+                    break;
+                    case 6:
+                    printf("Regresando al Menú Principal\n");
+                    break;
+                    default:
+                    printf("Opción inválida. Intente nuevamente.\n");
+                }
+            } while (opcion !=6);
+         printf("Cita actualizada exitosamente.\n");
+            return;
+        }
+    }
+    printf("Cita no encontrada.\n");   
 }
