@@ -17,6 +17,7 @@ void BuscarCita();
 void BuscarCodigo();
 void BuscarNombre();
 void ActualizarCita();
+void EliminarCita();
 int main(){
         int opcion;
         do{
@@ -36,10 +37,10 @@ int main(){
                 ActualizarCita();
                 break;
                 case 5:
-                printf("\n Eliminar cita\n");
+                EliminarCita();
                 break;
                 case 6:
-                printf("\n Guardar cambios de la cita\n");
+                printf("\nGuardando cambios de la cita\n");
                 break;
                 case 7:
                 printf("\nSalida\n");
@@ -214,4 +215,32 @@ void ActualizarCita(){
         }
     }
     printf("Cita no encontrada.\n");   
+}
+void EliminarCita(){
+    char codigo[16];
+    printf("\n=====Eliminar cita=====\n");
+    printf("Ingrese el codigo de la cita a eliminar: ");
+    scanf("%s", codigo);
+    for (int i=0; i<totalCitas; i++){
+        if (strcmp(citas[i].codigo_cita, codigo) == 0){
+            printf("=====Cita eliminable=====\n");
+            printf("Codigo: %s\n", citas[i].codigo_cita);
+            printf("Desea eliminar esta cita? (S/N): ");
+            char respuesta;
+            scanf(" %c", &respuesta);
+            if (respuesta == 'S' || respuesta == 's'){
+                for (int j=i; j<totalCitas-1; j++){
+                citas[j] = citas[j+1];
+            }
+            totalCitas--;
+            
+            printf("=====Cita eliminada exitosamente=====\n");
+            }
+            else{
+                printf("Eliminación cancelada.\n");
+            }
+            return;
+        }
+    }
+    printf("Cita no encontrada\n");
 }
