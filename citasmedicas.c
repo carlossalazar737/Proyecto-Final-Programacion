@@ -18,7 +18,10 @@ void BuscarCodigo();
 void BuscarNombre();
 void ActualizarCita();
 void EliminarCita();
+void GuardarCambios();
+void CargarArchivo();
 int main(){
+    CargarArchivo();
         int opcion;
         do{
             MostrarMenu();
@@ -40,7 +43,7 @@ int main(){
                 EliminarCita();
                 break;
                 case 6:
-                printf("\nGuardando cambios de la cita\n");
+                GuardarCambios();
                 break;
                 case 7:
                 printf("\nSalida\n");
@@ -225,6 +228,11 @@ void EliminarCita(){
         if (strcmp(citas[i].codigo_cita, codigo) == 0){
             printf("=====Cita eliminable=====\n");
             printf("Codigo: %s\n", citas[i].codigo_cita);
+            printf("Nombre del paciente: %s\n", citas[i].nombre_paciente);
+            printf("Especialidad: %s\n", citas[i].especialidad);
+            printf("Fecha: %s\n", citas[i].fecha);
+            printf("Hora: %s\n", citas[i].hora);
+            printf("Medico: %s\n", citas[i].medico);
             printf("Desea eliminar esta cita? (S/N): ");
             char respuesta;
             scanf(" %c", &respuesta);
@@ -243,4 +251,41 @@ void EliminarCita(){
         }
     }
     printf("Cita no encontrada\n");
+}
+void GuardarCambios(){
+    FILE *archivo;
+    archivo = fopen("citas.csv", "a");
+    if (archivo == NULL){
+        printf("Error al abrir el archivo.\n");
+        return;
+    }
+    for (int i=0; i<totalCitas; i++){
+        fprintf(archivo, "%s,%s,%s,%s,%s,%s\n", 
+            citas[i].codigo_cita, 
+            citas[i].nombre_paciente, 
+            citas[i].especialidad, 
+            citas[i].fecha, 
+            citas[i].hora, 
+            citas[i].medico);
+    }
+    fclose(archivo);
+    printf("=====Cambios guardados exitosamente en citas.csv=====\n");
+}
+void CargarArchivo(){
+    FILE *archivo;
+    archivo = fopen("citas.csv", "r");
+    if (archivo == NULL){
+        printf("No se pudo abrir el archivo citas.csv. Se creará uno nuevo al guardar cambios.\n");
+        return;
+    }
+    while (fscanf(archivo, "%[^,],%[^,],%[^,],%[^,],%[^,],%[^\n]\n", 
+        citas[totalCitas].codigo_cita, 
+        citas[totalCitas].nombre_paciente, 
+        citas[totalCitas].especialidad, 
+        citas[totalCitas].fecha, 
+        citas[totalCitas].hora, 
+        citas[totalCitas].medico) == 6){
+            totalCitas++;
+    }
+    fclose(archivo);
 }
