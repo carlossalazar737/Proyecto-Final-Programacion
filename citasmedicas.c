@@ -20,6 +20,8 @@ void ActualizarCita();
 void EliminarCita();
 void GuardarCambios();
 void CargarArchivo();
+int HorariosDisponibles(char fecha[], char hora[]);
+int horariosDisponiblesActualizar(char fecha[], char hora[], char codigo_cita[]);
 int main(){
     CargarArchivo();
         int opcion;
@@ -56,6 +58,23 @@ int main(){
         }while(opcion !=7);
         return 0;
     }
+int HorariosDisponibles(char fecha[], char hora[]){
+    for(int i=0; i<totalCitas; i++){
+        if(strcmp(citas[i].fecha, fecha) == 0 &&
+           strcmp(citas[i].hora, hora) == 0){
+            return 0;
+        }
+    }
+    return 1;
+}
+int horariosDisponiblesActualizar(char fecha[], char hora[], char codigo_cita[]){
+    for(int i=0; i<totalCitas; i++){
+        if(strcmp(citas[i].fecha, fecha) == 0 && strcmp(citas[i].hora, hora) == 0 && strcmp(citas[i].codigo_cita, codigo_cita) != 0){
+            return 0;
+        }
+    }
+    return 1; 
+}
 void MostrarMenu(){
             printf("\n==========================================\n");
             printf("/ BIENVENIDO AL SISTEMA DE CITAS MEDICAS /\n");
@@ -81,6 +100,10 @@ void RegistrarCita(){
     scanf("%s", citas[totalCitas].fecha);
     printf("Hora (hh:mm): ");
     scanf("%s", citas[totalCitas].hora);
+    if (!HorariosDisponibles(citas[totalCitas].fecha, citas[totalCitas].hora)) {
+        printf("El horario seleccionado ya está ocupado. Por favor, elija otro horario.\n");
+        return;
+    }
     printf("Medico: ");
     scanf(" %[^\n]", citas[totalCitas].medico);
     totalCitas++;
@@ -93,6 +116,7 @@ void ListarCitas(){
         return;
     }
     for (int i=0; i<totalCitas; i++){
+        printf("Codigo de cita, Nombre del paciente, Especialidad, Fecha, Hora, Medico\n");
         printf("%s,%s, %s, %s, %s, %s\n", 
             citas[i].codigo_cita, 
             citas[i].nombre_paciente, 
@@ -130,6 +154,7 @@ void BuscarCodigo(){
     for (int i=0; i<totalCitas; i++){
         if (strcmp(citas[i].codigo_cita, codigo) == 0){
             printf("=====Cita encontrada=====\n");
+            printf("Codigo de cita, Nombre del paciente, Especialidad, Fecha, Hora, Medico\n");
             printf("Codigo: %s\n", citas[i].codigo_cita);
             printf("Nombre del paciente: %s\n", citas[i].nombre_paciente);
             printf("Especialidad: %s\n", citas[i].especialidad);
@@ -149,6 +174,7 @@ void BuscarNombre(){
     for (int i=0; i<totalCitas; i++){
         if (strcmp(citas[i].nombre_paciente, nombre) == 0){
             printf("=====Cita encontrada=====\n");
+            printf("Codigo de cita, Nombre del paciente, Especialidad, Fecha, Hora, Medico\n");
             printf("Codigo: %s\n", citas[i].codigo_cita);
             printf("Nombre del paciente: %s\n", citas[i].nombre_paciente);
             printf("Especialidad: %s\n", citas[i].especialidad);
@@ -169,6 +195,7 @@ void ActualizarCita(){
         Cita *cita = &citas[i];
         if (strcmp(citas[i].codigo_cita, codigo) == 0){
             printf("=====Cita Actualizable=====\n");
+            printf("Codigo de cita, Nombre del paciente, Especialidad, Fecha, Hora, Medico\n");
             printf("Codigo: %s\n", cita->codigo_cita);
             printf("Nombre del paciente: %s\n", cita->nombre_paciente);
             printf("Especialidad: %s\n", cita->especialidad);
@@ -197,10 +224,18 @@ void ActualizarCita(){
                     case 3:
                     printf("Ingrese la nueva fecha (dd/mm/aaaa): ");
                     scanf("%s", cita->fecha);
+                    if(!horariosDisponiblesActualizar(cita->fecha,
+                                    cita->hora,
+                                    cita->codigo_cita)){
+                                    printf("Ese horario ya está ocupado.\n");}
                     break;
                     case 4:
                     printf("Ingrese la nueva hora (hh:mm): ");
                     scanf("%s", cita->hora);
+                    if(!horariosDisponiblesActualizar(cita->fecha,
+                                    cita->hora,
+                                    cita->codigo_cita)){
+                                    printf("Ese horario ya está ocupado.\n");}
                     break;
                     case 5:
                     printf("Ingrese el nuevo medico: ");
@@ -227,6 +262,7 @@ void EliminarCita(){
     for (int i=0; i<totalCitas; i++){
         if (strcmp(citas[i].codigo_cita, codigo) == 0){
             printf("=====Cita eliminable=====\n");
+            printf("Codigo de cita, Nombre del paciente, Especialidad, Fecha, Hora, Medico\n");
             printf("Codigo: %s\n", citas[i].codigo_cita);
             printf("Nombre del paciente: %s\n", citas[i].nombre_paciente);
             printf("Especialidad: %s\n", citas[i].especialidad);
@@ -254,12 +290,13 @@ void EliminarCita(){
 }
 void GuardarCambios(){
     FILE *archivo;
-    archivo = fopen("citas.csv", "a");
+    archivo = fopen("citas.csv", "w");
     if (archivo == NULL){
         printf("Error al abrir el archivo.\n");
         return;
     }
     for (int i=0; i<totalCitas; i++){
+        
         fprintf(archivo, "%s,%s,%s,%s,%s,%s\n", 
             citas[i].codigo_cita, 
             citas[i].nombre_paciente, 
@@ -289,3 +326,4 @@ void CargarArchivo(){
     }
     fclose(archivo);
 }
+
